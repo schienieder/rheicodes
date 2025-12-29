@@ -20,6 +20,32 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Email Integration
+
+This project includes a contact form that allows visitors to send you emails directly from the website. The form is integrated with [Brevo](https://www.brevo.com/) for email delivery.
+
+### Setup
+
+1. Create a Brevo account at [https://www.brevo.com/](https://www.brevo.com/)
+2. Generate an API key in your Brevo dashboard
+3. Copy the `.env.example` file to `.env.local`:
+   ```bash
+   cp .env.example .env.local
+   ```
+4. Add your Brevo API key to the `.env.local` file:
+   ```
+   BREVO_API_KEY=your_actual_brevo_api_key_here
+   BREVO_TO_EMAIL=justinerheitorres@gmail.com
+   ```
+
+### Usage
+
+The contact form is accessible through the "Get in Touch" button in the Hero section of the website. When a visitor submits the form:
+
+- Their name, email, subject, and message are sent to your specified email address
+- Optional file attachments are included with the email
+- The form includes validation to ensure all required fields are filled out correctly
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
