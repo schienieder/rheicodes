@@ -9,7 +9,7 @@ const SectionBadge = ({
     title
 }: SectionBadgeProps) => {
     return (
-        <Badge className="bg-blue-100 text-blue-600 rounded-md text-sm font-medium">{title}</Badge>
+        <Badge className="bg-blue-600/15 text-blue-600 rounded-md px-3 py-1 text-sm font-medium">{title}</Badge>
     )
 }
 
