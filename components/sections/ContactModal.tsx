@@ -64,7 +64,7 @@ const ContactModal = ({ isOpen, onClose, onSend }: ContactModalProps) => {
           <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'
             }`}>Get in Touch</h2>
           <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
-            Have a project in mind or just want to say hello? Fill out the form below and I'll get back to you as soon as possible.
+            Have a project in mind or just want to say hello? Fill out the form below and I&#39;ll get back to you as soon as possible.
           </p>
 
           <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>

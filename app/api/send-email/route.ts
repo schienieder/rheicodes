@@ -1,5 +1,6 @@
 
 import { NextRequest, NextResponse } from 'next/server';
+import { contactEmailTemplate } from '../../../templates/contact-email-template';
 
 export async function POST(req: NextRequest) {
     try {
@@ -33,16 +34,7 @@ export async function POST(req: NextRequest) {
             ],
             subject: subject,
             textContent: `Contact form submission:\n\n${message}`,
-            htmlContent: `
-                <html>
-                    <body>
-                        <h2>Web Portfolio Form Submission</h2>
-                        <p><strong>Subject:</strong> ${subject}</p>
-                        <p><strong>Message:</strong></p>
-                        <p>${message}</p>
-                    </body>
-                </html>
-            `,
+            htmlContent: contactEmailTemplate(subject, message),
         };
 
         // Handle file attachments if any
