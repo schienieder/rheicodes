@@ -1,6 +1,6 @@
 'use client';
 
-import { X } from 'lucide-react';
+import { X, Trash2, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -14,11 +14,28 @@ interface ContactModalProps {
 const ContactModal = ({ isOpen, onClose, onSend }: ContactModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const { darkMode } = useTheme();
 
   if (!isOpen) {
     return null;
   }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      // Convert FileList to array and append to existing files
+      const newFiles = Array.from(e.target.files);
+      setSelectedFiles(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  const removeFile = (index: number) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const clearAllFiles = () => {
+    setSelectedFiles([]);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,8 +44,16 @@ const ContactModal = ({ isOpen, onClose, onSend }: ContactModalProps) => {
 
     try {
       const formData = new FormData(e.currentTarget);
+
+      // Add all selected files to the form data
+      selectedFiles.forEach(file => {
+        formData.append('file', file);
+      });
+
       await onSend(formData);
       onClose();
+      // Clear selected files after successful submission
+      setSelectedFiles([]);
     } catch (err) {
       console.error('Error sending email:', err);
       setError('Failed to send message. Please try again later.');
@@ -117,19 +142,61 @@ const ContactModal = ({ isOpen, onClose, onSend }: ContactModalProps) => {
               >
                 Attachments (Optional)
               </label>
-              <input
-                type="file"
-                id="file"
-                name="file"
-                multiple
-                accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
-                className={`mt-1 block w-full text-sm ${darkMode
-                  ? 'text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-700 file:text-blue-100 hover:file:bg-blue-600'
-                  : 'text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100'
-                  }`}
-              />
-              <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'
-                } mt-1`}>Accepted file types: images, PDF, Word, Excel.</p>
+              <div className="mt-1">
+                <input
+                  type="file"
+                  id="file"
+                  name="file"
+                  multiple
+                  accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
+                  onChange={handleFileChange}
+                  className={`block w-full text-sm ${darkMode
+                    ? 'text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-700 file:text-blue-100 hover:file:bg-blue-600'
+                    : 'text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100'
+                    }`}
+                />
+                {selectedFiles.length > 0 && (
+                  <div className="mt-2">
+                    <div className="flex justify-between items-center mb-1">
+                      <p className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                        Selected files ({selectedFiles.length}):
+                      </p>
+                      <button
+                        type="button"
+                        onClick={clearAllFiles}
+                        className={`text-xs ${darkMode ? 'text-red-400 hover:text-red-300' : 'text-red-600 hover:text-red-800'}`}
+                      >
+                        Clear all
+                      </button>
+                    </div>
+                    <ul className="mt-1 space-y-1 max-h-40 overflow-y-auto">
+                      {selectedFiles.map((file, index) => (
+                        <li
+                          key={index}
+                          className={`flex justify-between items-center text-sm truncate ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}
+                        >
+                          <div className="flex items-center truncate">
+                            <Upload className="h-3 w-3 mr-2 flex-shrink-0" />
+                            <span className="truncate" title={file.name}>
+                              {file.name} ({(file.size / 1024).toFixed(1)} KB)
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeFile(index)}
+                            className={`ml-2 ${darkMode ? 'text-red-400 hover:text-red-300' : 'text-red-600 hover:text-red-800'}`}
+                            title="Remove file"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'
+                  } mt-1`}>Accepted file types: images, PDF, Word, Excel.</p>
+              </div>
             </div>
 
             {error && (
