@@ -33,7 +33,7 @@ const ProjectsSection = () => {
       description: 'A web application system that tracks your lended amount, due date, interest rate and other financial details. Features secure user authentication, automated reminders, and comprehensive reporting tools to help manage personal and business loans efficiently.',
       category: 'FinTech',
       technologies: ['NextJS', 'Supabase', 'OAuth', 'Brevo'],
-      comingSoon: true
+      link: 'https://lend-track.vercel.app/'
     },
     {
       title: 'BrainStorm Collaboration',
@@ -128,9 +128,9 @@ const ProjectsSection = () => {
           {projects.map((project, index) => (
             <div
               key={index}
-              className={`group rounded-lg border ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'} p-6 transition-all hover:border-blue-500 ${activeTab === 'personal' || (activeTab === 'professional' && 'link' in project) ? 'cursor-pointer' : ''}`}
+              className={`group rounded-lg border ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'} p-6 transition-all hover:border-blue-500 ${'link' in project ? 'cursor-pointer' : ''}`}
               onClick={() => {
-                if (activeTab === 'professional' && 'link' in project) {
+                if ('link' in project) {
                   window.open((project as any)?.link ?? '', '_blank');
                 }
               }}
@@ -139,10 +139,7 @@ const ProjectsSection = () => {
                 <div className={`inline-block rounded-md ${darkMode ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-700'} px-2 py-1 text-xs font-medium`}>
                   {project.category}
                 </div>
-                {activeTab === 'professional' && 'link' in project && (
-                  <ExternalLink className={`h-5 w-5 ${darkMode ? 'text-gray-400' : 'text-gray-400'} opacity-0 transition-opacity group-hover:opacity-100`} />
-                )}
-                {activeTab === 'personal' && !('comingSoon' in project) && (
+                {'link' in project && (
                   <ExternalLink className={`h-5 w-5 ${darkMode ? 'text-gray-400' : 'text-gray-400'} opacity-0 transition-opacity group-hover:opacity-100`} />
                 )}
               </div>
