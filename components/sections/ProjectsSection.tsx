@@ -29,11 +29,11 @@ const ProjectsSection = () => {
   // Personal projects data
   const personalProjects: Project[] = [
     {
-      title: 'LendTrack',
+      title: 'HuramTrack',
       description: 'A web application system that tracks your lended amount, due date, interest rate and other financial details. Features secure user authentication, automated reminders, and comprehensive reporting tools to help manage personal and business loans efficiently.',
       category: 'FinTech',
       technologies: ['NextJS', 'Supabase', 'OAuth', 'Brevo'],
-      link: 'https://lend-track.vercel.app/'
+      link: 'https://huram-track.vercel.app/'
     },
     {
       title: 'BrainStorm Collaboration',
